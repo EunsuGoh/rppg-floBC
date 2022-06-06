@@ -1,6 +1,6 @@
 cur_path=$(pwd)
 cd "${cur_path%FDMMLS*}/FDMMLS"
-cd ./backend/
+cd ~/eunsu/work/FLoBC/backend
 
 command_start="sh "
 command="./build_finalize.sh "
@@ -83,7 +83,8 @@ for ((i=0;i<node_count;i++));
 do
     echo "Staring validator #$i"
     source ./scripts/utils/newTab.sh
-    openTab $command_start "$command_start ./scripts/spawn/validator_run.sh $command_start $i $path $node_count $sync $duration $scoring_flag $modelName"
+    echo $PWD
+    openTab $command_start "$command_start $PWD/scripts/spawn/validator_run.sh $command_start $i $path $node_count $sync $duration $scoring_flag $modelName"
     sleep 10
 
 done
@@ -111,6 +112,9 @@ done
 ###############################
 ## Running light client
 ###############################
+# cd ~/eunsu/work/FLoBC
+echo $PWD
+
 for ((i=0;i<trainers;i++))
 do
     source ./scripts/utils/newTab.sh
@@ -124,7 +128,8 @@ do
     echo $start_public_port
     trainer_noise=$(echo "$i * $accumulated_error_scale" | bc)
     rm $lightclient/ModelMetadata
-    openTab $command_start "npm start --prefix $lightclient -- 9000 models/MNIST28X28/data.csv $trainer_noise $modelName"
+    
+    openTab $command_start "npm start --prefix $PWD/$lightclient -- 9000 models/MNIST28X28/data.csv $trainer_noise $modelName"
     sleep 10
 done
 
@@ -144,7 +149,8 @@ then
             currentT=$((tmp+0))
         fi
     fi
-    openTab $command_start "$command_start ./scripts/track_plot/track.sh $endS $currentT $path2"
+    echo $PWD
+    openTab $command_start "$command_start $PWD/scripts/track_plot/track.sh $endS $currentT $path2"
     # $command_start ./scripts/track_plot/track.sh $endS $currentT
 fi
 

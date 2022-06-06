@@ -1,4 +1,5 @@
 command_start=$1
+echo "validator_run"
 i=$2
 path=$3
 nodes=$4
@@ -6,6 +7,9 @@ sync=$5
 period=$6
 scoring_flag=$7
 model_name=$8
+cd ~/eunsu/work/FLoBC
+echo $path
+echo $PWD
 if [[ $path != "./" ]]
 then 
     mkdir $path

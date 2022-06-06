@@ -13,6 +13,8 @@
 // limitations under the License.
 
 //! Cryptocurrency database schema.
+use std::env;
+
 use exonum::{
     crypto::{Hash, PublicKey},
     merkledb::{
@@ -51,7 +53,7 @@ use exonum_node::MODEL_SIZE;
 use exonum_node::MODEL_NAME;
 use std::sync::atomic::Ordering;
 
-const DEBUG: bool = false;
+const DEBUG: bool = true;
 
 /// Database schema for the cryptocurrency.
 ///
@@ -465,18 +467,26 @@ impl SchemaUtils {
 
         let tempfile_path: String = format!("../tx_validator/dist/{}", tempfile_name);
 
+        println!("{} {}", tempfile_name, tempfile_path);
+
+
         {
             fs::write(&tempfile_path, weights_str).expect("Unable to write file");
         }
 
-        let model_name = MODEL_NAME.lock().unwrap();
-        let output = Command::new("python")
+        let path = env::current_dir().unwrap();
+        println!("{}", path.display());
+
+      //  let model_name = MODEL_NAME.lock().unwrap();
+        // let output = 
+        let output = Command::new("python3")
             .arg("evaluation_wrapper.py")
             .arg(tempfile_name)
-            .arg((*model_name).clone())
+            .arg("MNIST28X28")
             .current_dir("../tx_validator/src")
             .output()
             .expect("failed to execute process");
+        println!("{}", path.display());
 
         {
             fs::remove_file(&tempfile_path).expect("Unable to delete file");

@@ -4,7 +4,9 @@
 # Opens a new tab in the current Terminal window and optionally executes a command.
 # When invoked via a function named 'newwin', opens a new Terminal *window* instead.
 function newtab {
-
+    echo "------"
+    echo $PWD
+    echo "------"
     # If this function was invoked directly by a function named 'newwin', we open a new *window* instead
     # of a new tab in the existing window.
     local funcName=$FUNCNAME
@@ -186,10 +188,10 @@ EOF
 openTab(){
     command_start=$1
     command=$2
-    if [ $command_start == "bash" ] 
-    then
-        gnome-terminal -x bash -c "$command; exec bash"
-    else
-        newtab $command
-    fi
+    #if [ $command_start == "bash" ] 
+    #then
+     #   gnome-terminal -x bash -c "$command; exec bash"
+    #else
+    newtab $command
+    #fi
 }
