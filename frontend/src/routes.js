@@ -18,6 +18,7 @@
 
 import InitializationPage from "./components/InitializationPage";
 import StatusPage from "./components/StatusPage";
+import WebcamPage from "./components/WebcamPage";
 
 var routes = [
   {
@@ -34,6 +35,12 @@ var routes = [
     component: InitializationPage,
     layout: "/admin",
   },
-  
+  {
+    path: "/cam",
+    name: "Camera Page",
+    icon: "tim-icons icon-chart-pie-36",
+    component: WebcamPage,
+    layout: "/admin",
+  },
 ];
 export default routes;

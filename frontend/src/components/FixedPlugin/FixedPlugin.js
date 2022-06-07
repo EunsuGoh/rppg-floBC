@@ -19,8 +19,8 @@ import React from "react";
 
 // reactstrap components
 import { Button, Dropdown, DropdownToggle, Badge } from "reactstrap";
-import { ThemeContext, themes } from "contexts/ThemeContext";
-import { backgroundColors } from "contexts/BackgroundColorContext";
+import { ThemeContext, themes } from "../../contexts/ThemeContext";
+import { backgroundColors } from "../../contexts/BackgroundColorContext";
 
 function FixedPlugin(props) {
   const [dropDownIsOpen, setdropDownIsOpen] = React.useState(false);
@@ -84,7 +84,6 @@ function FixedPlugin(props) {
               )}
             </ThemeContext.Consumer>
           </li>
-        
         </ul>
       </Dropdown>
     </div>

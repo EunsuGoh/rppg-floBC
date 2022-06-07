@@ -21,20 +21,18 @@ import { Route, Switch, Redirect, useLocation } from "react-router-dom";
 import PerfectScrollbar from "perfect-scrollbar";
 
 // core components
-import AdminNavbar from "components/Navbars/AdminNavbar.js";
-import Footer from "components/Footer/Footer.js";
-import Sidebar from "components/Sidebar/Sidebar.js";
-import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
+import AdminNavbar from "../../components/Navbars/AdminNavbar.js";
+import Sidebar from "../../components/Sidebar/Sidebar.js";
+import FixedPlugin from "../../components/FixedPlugin/FixedPlugin.js";
 
-import routes from "routes.js";
+import routes from "../../routes";
 
-import logo from "assets/img/react-logo.png";
-import { BackgroundColorContext } from "contexts/BackgroundColorContext";
+// import logo from "assets/img/react-logo.png";
+import { BackgroundColorContext } from "../../contexts/BackgroundColorContext";
 
 var ps;
 
 function Admin(props) {
-
   const location = useLocation();
   const mainPanelRef = React.useRef(null);
   const [sidebarOpened, setsidebarOpened] = React.useState(
@@ -85,9 +83,7 @@ function Admin(props) {
         return (
           <Route
             path={prop.layout + prop.path}
-            render={(props_) => (
-              <prop.component {...props} isAuthed={true} />
-            )}
+            render={(props_) => <prop.component {...props} isAuthed={true} />}
             key={key}
           />
         );
@@ -104,7 +100,7 @@ function Admin(props) {
     }
     return "Brand";
   };
-  
+
   return (
     <BackgroundColorContext.Consumer>
       {({ color, changeColor }) => (
@@ -113,11 +109,11 @@ function Admin(props) {
             <Sidebar
               sys_state={props}
               routes={routes}
-              logo={{
-                outterLink: "https://www.creative-tim.com/",
-                text: "General Info",
-                imgSrc: logo,
-              }}
+              // logo={{
+              //   outterLink: "https://www.creative-tim.com/",
+              //   text: "General Info",
+              //   imgSrc: logo,
+              // }}
               toggleSidebar={toggleSidebar}
               trainersNum={props.trainersNum}
               validatorsNum={props.validatorsNum}

@@ -29,7 +29,7 @@ import { Nav, NavLink as ReactstrapNavLink } from "reactstrap";
 import {
   BackgroundColorContext,
   backgroundColors,
-} from "contexts/BackgroundColorContext";
+} from "../../contexts/BackgroundColorContext";
 
 var ps;
 
@@ -108,14 +108,14 @@ function Sidebar(props) {
     }
   }
   console.warn(props.sys_state);
-  let { modelName,
+  let {
+    modelName,
     validatorsNum,
     trainersNum,
     syncPolicy,
     currentModelIndex,
     currentModelScore,
-  } = props.sys_state
-
+  } = props.sys_state;
 
   return (
     <BackgroundColorContext.Consumer>
@@ -129,79 +129,79 @@ function Sidebar(props) {
               </div>
             ) : null}
 
-
-
-
             <Nav>
-
               <li>
                 <NavLink
-                  to={'/admin/monitor'}
+                  to={"/admin/monitor"}
                   className="nav-link"
                   activeClassName="active"
                 >
-                  <p style={{ fontWeight: 'bold' }}>MODEL NAME: {modelName}</p>
+                  <p style={{ fontWeight: "bold" }}>MODEL NAME: {modelName}</p>
                 </NavLink>
               </li>
               <li>
                 <NavLink
-                  to={'/admin/monitor'}
+                  to={"/admin/monitor"}
                   className="nav-link"
                   activeClassName="active"
                 >
-                  <p style={{ fontWeight: 'bold' }}>LATEST SCORE: {currentModelScore}</p>
+                  <p style={{ fontWeight: "bold" }}>
+                    LATEST SCORE: {currentModelScore}
+                  </p>
                 </NavLink>
               </li>
               <li>
                 <NavLink
-                  to={'/admin/monitor'}
+                  to={"/admin/monitor"}
                   className="nav-link"
                   activeClassName="active"
                 >
-                  <p style={{ fontWeight: 'bold' }}>CURRENT ROUND: {currentModelIndex}</p>
-                </NavLink>
-              </li>
-
-              <li>
-                <NavLink
-                  to={'/admin/monitor'}
-                  className="nav-link"
-                  activeClassName="active"
-                >
-                  <p style={{ fontWeight: 'bold' }}>NUMBER OF VALIDATORS: {validatorsNum}</p>
+                  <p style={{ fontWeight: "bold" }}>
+                    CURRENT ROUND: {currentModelIndex}
+                  </p>
                 </NavLink>
               </li>
 
               <li>
                 <NavLink
-                  to={'/admin/monitor'}
+                  to={"/admin/monitor"}
                   className="nav-link"
                   activeClassName="active"
                 >
-                  <p style={{ fontWeight: 'bold' }}>NUMBER OF TRAINERS: {trainersNum}</p>
+                  <p style={{ fontWeight: "bold" }}>
+                    NUMBER OF VALIDATORS: {validatorsNum}
+                  </p>
                 </NavLink>
               </li>
 
               <li>
                 <NavLink
-                  to={'/admin/monitor'}
+                  to={"/admin/monitor"}
                   className="nav-link"
                   activeClassName="active"
                 >
-                  <p style={{ fontWeight: 'bold' }}>SYNC POLICY: {syncPolicy}</p>
+                  <p style={{ fontWeight: "bold" }}>
+                    NUMBER OF TRAINERS: {trainersNum}
+                  </p>
                 </NavLink>
               </li>
 
+              <li>
+                <NavLink
+                  to={"/admin/monitor"}
+                  className="nav-link"
+                  activeClassName="active"
+                >
+                  <p style={{ fontWeight: "bold" }}>
+                    SYNC POLICY: {syncPolicy}
+                  </p>
+                </NavLink>
+              </li>
 
               {routes.map((prop, key) => {
                 if (prop.redirect) return null;
                 return (
-                  <li
-                    className={
-                      activeRoute(prop.path)
-                    }
-                    key={key}
-                  >
+                  <li className={activeRoute(prop.path)} key={key}>
                     <NavLink
                       to={prop.layout + prop.path}
                       className="nav-link"
@@ -217,34 +217,35 @@ function Sidebar(props) {
 
               <li>
                 <NavLink
-                  to={'/admin/spawn'}
+                  to={"/admin/spawn"}
                   className="nav-link"
                   activeClassName="active"
-                  onClick={() => 
-                    {
-                      let terminals = (props.syncPolicy == "BAP") ? 0 : 1;
-                      terminals += parseInt(props.validatorsNum) + parseInt(props.trainersNum);
-                      terminals += 1;
-                      let url = `http://localhost:24587/terminate?terminals=${terminals}`;
-                      const options = { method: "GET" };
-                      fetch(url, options)
-                          .then(res => {
-                            res.json()
-                            window.location.reload();
-                          })
-                          .then(data => {
-                              console.log(data)
-                              window.location.reload();
-                          })
-                          .then(window.location.reload())
-                          // props.terminationCallback()
-                    }
-                  }
+                  onClick={() => {
+                    let terminals = props.syncPolicy == "BAP" ? 0 : 1;
+                    terminals +=
+                      parseInt(props.validatorsNum) +
+                      parseInt(props.trainersNum);
+                    terminals += 1;
+                    let url = `http://localhost:24587/terminate?terminals=${terminals}`;
+                    const options = { method: "GET" };
+                    fetch(url, options)
+                      .then((res) => {
+                        res.json();
+                        window.location.reload();
+                      })
+                      .then((data) => {
+                        console.log(data);
+                        window.location.reload();
+                      })
+                      .then(window.location.reload());
+                    // props.terminationCallback()
+                  }}
                 >
-                  <p style={{ fontWeight: 'bold', color: 'red' }}>TERMINATE SYSTEM</p>
+                  <p style={{ fontWeight: "bold", color: "red" }}>
+                    TERMINATE SYSTEM
+                  </p>
                 </NavLink>
               </li>
-
             </Nav>
           </div>
         </div>
@@ -258,7 +259,7 @@ Sidebar.defaultProps = {
   routes: [{}],
   trainersNum: 0,
   validatorsNum: 0,
-  syncPolicy: "BAP"
+  syncPolicy: "BAP",
 };
 
 Sidebar.propTypes = {
