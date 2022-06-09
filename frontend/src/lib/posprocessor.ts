@@ -7,17 +7,17 @@ import {
   mean,
   sub,
   reshape,
-  Rank,
-} from "@tensorflow/tfjs";
+  Rank
+} from '@tensorflow/tfjs';
 import MovingAvgProcessor, {
-  MovingAvgProcessorInteface,
-} from "./moveAvgProcessor";
-import TSM from "../tensorflow/TSM";
-import AttentionMask from "../tensorflow/AttentionMask";
-import { BATCHSIZE } from "../constant";
-import { TensorStoreInterface } from "./tensorStore";
+  MovingAvgProcessorInteface
+} from './moveAvgProcessor';
+import TSM from '../tensorflow/TSM';
+import AttentionMask from '../tensorflow/AttentionMask';
+import { BATCHSIZE } from '../constant';
+import { TensorStoreInterface } from './tensorStore';
 
-const path = "model.json";
+const path = 'http://127.0.0.1:8887/model.json'; //웹서버 구동 후 연결
 
 export interface PosprocessorInteface {
   compute(normalizedBatch: Tensor<Rank>, rawBatch: Tensor<Rank>): void;
@@ -48,8 +48,9 @@ class Posprocessor implements PosprocessorInteface {
     if (this.model === null) {
       serialization.registerClass(TSM);
       serialization.registerClass(AttentionMask);
+      console.log(path);
       this.model = await loadLayersModel(path);
-      console.log("model loaded succesfully");
+      console.log('model loaded succesfully');
     }
     return true;
   };

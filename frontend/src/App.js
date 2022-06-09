@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import "./App.css";
-import { retrieveStatusInfo, getScoreByIndex } from "./components/Utils";
+import React, { Component } from 'react';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import './App.css';
+import { retrieveStatusInfo, getScoreByIndex } from './components/Utils';
 
-import "./assets/scss/black-dashboard-react.scss";
-import "./assets/css/nucleo-icons.css";
-import ThemeContextWrapper from "./components/ThemeWrapper/ThemeWrapper";
-import BackgroundColorWrapper from "./components/BackgroundColorWrapper/BackgroundColorWrapper";
+import './assets/scss/black-dashboard-react.scss';
+import './assets/css/nucleo-icons.css';
+import ThemeContextWrapper from './components/ThemeWrapper/ThemeWrapper';
+import BackgroundColorWrapper from './components/BackgroundColorWrapper/BackgroundColorWrapper';
 
-import AdminLayout from "./layouts/Admin/Admin";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import AdminLayout from './layouts/Admin/Admin';
 
 class App extends Component {
   constructor() {
@@ -26,36 +26,36 @@ class App extends Component {
       scoresArray: [],
       targetVersion: null,
       trainersStatus: {},
-      isRunning: false,
+      isRunning: false
     };
   }
 
   async statusUpdate() {
     if (!this.state.isRunning) return;
-    let statusInfo = await retrieveStatusInfo();
-    let updatedTrainersStatus = {};
-    let currentModelIndex = statusInfo[0];
-    let currentModelScore = statusInfo[1];
+    const statusInfo = await retrieveStatusInfo();
+    const updatedTrainersStatus = {};
+    const currentModelIndex = statusInfo[0];
+    const currentModelScore = statusInfo[1];
     let updatedScoresArray = this.state.scoresArray;
 
     if (currentModelIndex > this.lastIndex) {
       while (this.lastIndex + 1 < currentModelIndex) {
-        this.lastIndex++;
-        let inBetweenScore = await getScoreByIndex(this.lastIndex);
+        this.lastIndex += 1;
+        const inBetweenScore = await getScoreByIndex(this.lastIndex);
         updatedScoresArray = [...updatedScoresArray, inBetweenScore];
       }
       this.lastIndex = currentModelIndex;
       updatedScoresArray = [...updatedScoresArray, currentModelScore];
     }
 
-    let shuffledTrainerStatus = statusInfo[2];
+    const shuffledTrainerStatus = statusInfo[2];
 
-    //updates trainers' status object
+    // updates trainers' status object
     for (const [key, value] of Object.entries(this.keyToNum)) {
       updatedTrainersStatus[this.keyToNum[key]] = shuffledTrainerStatus[key];
     }
 
-    //in the case that the trainers' status object is not complete
+    // in the case that the trainers' status object is not complete
     if (
       Object.keys(updatedTrainersStatus).length <
       Object.keys(shuffledTrainerStatus).length
@@ -72,7 +72,7 @@ class App extends Component {
       currentModelIndex,
       currentModelScore,
       scoresArray: updatedScoresArray,
-      trainersStatus: updatedTrainersStatus,
+      trainersStatus: updatedTrainersStatus
     });
   }
 
@@ -97,7 +97,7 @@ class App extends Component {
       currentModelIndex: null,
       currentModelScore: null,
       scoresArray: [],
-      trainersStatus: {},
+      trainersStatus: {}
     });
 
   terminationCallback = () => this.setState({ isRunning: false });
@@ -110,12 +110,12 @@ class App extends Component {
             <Switch>
               <Route
                 path="/admin"
-                render={(props) => (
+                render={props => (
                   <AdminLayout
                     {...{
                       ...this.state,
                       startPolling: this.pollingCallback,
-                      terminationCallback: this.terminationCallback,
+                      terminationCallback: this.terminationCallback
                     }}
                   />
                 )}

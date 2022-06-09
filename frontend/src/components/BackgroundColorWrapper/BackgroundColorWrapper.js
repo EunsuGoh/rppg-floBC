@@ -1,20 +1,18 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   BackgroundColorContext,
-  backgroundColors,
-} from "../../contexts/BackgroundColorContext";
+  backgroundColors
+} from '../../contexts/BackgroundColorContext';
 
 export default function BackgroundColorWrapper(props) {
   const [color, setColor] = useState(backgroundColors.blue);
 
-  function changeColor(color) {
-    setColor(color);
+  function changeColor(_color) {
+    setColor(_color);
   }
 
   return (
-    <BackgroundColorContext.Provider
-      value={{ color: color, changeColor: changeColor }}
-    >
+    <BackgroundColorContext.Provider value={{ color, changeColor }}>
       {props.children}
     </BackgroundColorContext.Provider>
   );

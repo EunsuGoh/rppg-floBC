@@ -5,6 +5,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.1",
     "@tensorflow/tfjs": "^2.6.0",
+    "@tensorflow/tfjs-node": "^3.18.0",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
@@ -16,6 +17,8 @@
     "express": "^4.17.1",
     "fili": "^2.0.3",
     "lodash": "^4.17.20",
+    "next": "^11.1.4",
+    "node-fetch": "^3.2.5",
     "node-sass": "4.14.1",
     "node-sass-package-importer": "5.3.2",
     "perfect-scrollbar": "1.5.0",
@@ -36,6 +39,7 @@
     "xhr": "^2.6.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.17.12",
     "@types/chart.js": "^2.9.28",
     "@types/classnames": "^2.3.1",
     "@types/jest": "^28.1.1",
@@ -60,6 +64,7 @@
     "typescript": "^4.0.3"
   },
   "scripts": {
+    "dev": "next dev",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
