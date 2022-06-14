@@ -2,6 +2,7 @@ node_count=$3
 start_peer_port=7091
 start_public_port=9000
 
+echo $PWD
 cd example
 
 i=$(($1))

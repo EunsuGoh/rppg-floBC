@@ -26,4 +26,5 @@ fi
 # fi
 source ./scripts/utils/newTab.sh
 cd $path/backend
+echo $PWD
 $command_start "./run_node.sh" $i $sync $nodes $scoring_flag $model_name
