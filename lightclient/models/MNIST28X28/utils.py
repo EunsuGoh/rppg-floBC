@@ -2,6 +2,7 @@
 import sys
 import pandas as pd
 import numpy as np
+import h5py
 # %%
 ################################
 # Formatted print back to node
@@ -30,7 +31,9 @@ def read_input(index):
     if len(sys.argv) < (index+1):
         raise Exception('No dataset path found')
 
-    df = pd.read_csv(sys.argv[index])
+    df = h5py.File("PhysNet_UBFC_test.hdf5", "r")
+
+    # df = pd.read_csv(sys.argv[index])
     # df = pd.read_csv("data.csv")
     if len(df) == 0:
         raise Exception('Empty dataset')
