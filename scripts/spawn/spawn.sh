@@ -6,6 +6,7 @@ command_start="sh "
 command="./build_finalize.sh "
 path="./"
 path2=""
+two=2
 endS=0
 willTerminate=0
 start_public_port=9000
@@ -128,8 +129,9 @@ do
     echo $start_public_port
     trainer_noise=$(echo "$i * $accumulated_error_scale" | bc)
     rm $lightclient/ModelMetadata
-    
-    openTab $command_start "npm start --prefix $PWD/$lightclient -- 9000 models/MNIST28X28/data.csv $trainer_noise $modelName"
+    plusone=$(($i+$two))
+    # index 3 -> /Users/daeyeolkim/eunsu/work/FLoBC/data/PhysNet_UBFC_test$(i+1).hdf5
+    openTab $command_start "npm start --prefix $PWD/$lightclient -- 9000 /Users/daeyeolkim/eunsu/work/FLoBC/data/PhysNet_UBFC_train_$plusone.hdf5 $trainer_noise $modelName"
     sleep 10
 done
 

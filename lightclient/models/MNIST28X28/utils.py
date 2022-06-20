@@ -30,9 +30,11 @@ def send_to_node(newModel_flag, initial_model, update_vector):
 def read_input(index):
     if len(sys.argv) < (index+1):
         raise Exception('No dataset path found')
-
-    df = h5py.File("PhysNet_UBFC_test.hdf5", "r")
-
+# /Users/daeyeolkim/eunsu/work/FLoBC/data/PhysNet_UBFC_test.hdf5
+    print("reading dataset...")
+    # sys.argv[index] => 3번째 data path
+    df = h5py.File(sys.argv[index], "r")
+    print("dataset reading success")
     # df = pd.read_csv(sys.argv[index])
     # df = pd.read_csv("data.csv")
     if len(df) == 0:
@@ -53,12 +55,14 @@ def readNewModel_flag(index):
 def read_weights(index):
     if len(sys.argv) < (index+1):
         raise Exception('No weights list found')
-
+    print(sys.argv[index])
     weights_list_path = sys.argv[index]
     weights_list = open(weights_list_path, "r").readline().split("|")
     if len(weights_list) == 0:
         raise Exception('Empty weights list')
+    print('reading weight...')
     weights_list = [float(i) for i in weights_list] 
+    print("done")
     return weights_list
 
 # %%
@@ -73,7 +77,9 @@ def flattenWeights(model):
 
 # %%
 def trainModel(model, data_train, label_train):
+    print('#################### model training start ####################')
     model.fit(data_train, label_train, epochs=1, verbose=1)
+    print('#################### model training done ####################')
     return model
 
 # %%
@@ -87,6 +93,12 @@ def rebuildModel(new_model, list):
         bound = np.array(new_model.layers[i].get_weights(), dtype="object").size
         weights = []
         for j in range (0, bound):
+            print("**********************************************")
+            print("i",i);
+            print("j",j);
+            print(new_model.layers[i])
+            print(new_model.layers[i].get_weights())
+            print("**********************************************")
             size = (new_model.layers[i].get_weights()[j]).size
             arr = np.array(list[start:start+size])
             arr = arr.reshape(new_model.layers[i].get_weights()[j].shape)

@@ -151,6 +151,7 @@ def reshapeData(index):
         else:
             cnt+=1
 
+    df.close()
     # df = df.sample(int(0.3*len(df)))
     # label = df.iloc[:, 0]
     # label = label.to_numpy()
