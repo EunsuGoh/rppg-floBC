@@ -83,9 +83,6 @@ impl PublicApi {
             index_proof,
             ..
         } = state.data().proof_for_service_index("models").unwrap();
-        println("state & query is here");
-        println(state);
-
         let model_schema = SchemaImpl::new(state.service_data());
         let address = Address::from_key(SchemaUtils::pubkey_from_version(query.version));
         let to_model = model_schema.public.models.get_proof(address);

@@ -169,10 +169,12 @@ function WebcamPage({ name }: CamProps) {
     <div
       className="WebcamPageContainer"
       style={{
-        position: 'fixed',
+        position: 'absolute',
         display: 'flex',
         left: '20%',
-        top: '8%'
+        top: '8%',
+        width: '100vh',
+        overflow: 'auto'
       }}
     >
       <div>
