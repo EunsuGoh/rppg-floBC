@@ -55,7 +55,7 @@ def readNewModel_flag(index):
 def read_weights(index):
     if len(sys.argv) < (index+1):
         raise Exception('No weights list found')
-    print(sys.argv[index])
+    print("this is weight",sys.argv[index])
     weights_list_path = sys.argv[index]
     weights_list = open(weights_list_path, "r").readline().split("|")
     if len(weights_list) == 0:

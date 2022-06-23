@@ -14,7 +14,8 @@ MODELS_DIR = '../src/models/'
 
 model_id = sys.argv[6]
 
-data_dir = MODELS_DIR + model_id + '/data.csv'
+# data_dir = MODELS_DIR + model_id + '/data.csv'
+data_dir = "/Users/daeyeolkim/eunsu/work/FLoBC/data/PhysNet_UBFC_train_1.hdf5"
 
 
 import importlib
