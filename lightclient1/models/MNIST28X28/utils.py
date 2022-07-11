@@ -1,8 +1,10 @@
 # %%
 import sys
+import cv2
 import pandas as pd
 import numpy as np
 import h5py
+import zlib
 # %%
 ################################
 # Formatted print back to node
@@ -72,8 +74,31 @@ def flattenWeights(model):
           arr[i] = arr[i].flatten()
 
   arr = np.concatenate(arr)
+
+  ## encoding start
+#   arr_comp = arr*1000
+#   min_val = np.min(arr_comp)
+#   arr_comp += np.abs(np.min(arr_comp))
+#   arr_int = arr_comp.astype(np.uint8)
+
+#   min_len = int(np.ceil(np.sqrt(len(arr_int))))
+#   min_tot_len = min_len**2
+
+#   sub_len = int(min_tot_len - len(arr_int))
+#   hyper_param = np.asarray([len(arr_int), np.abs(min_val)],dtype = np.uint8)
+#   zero_arr = np.zeros(shape=sub_len,dtype=np.uint8)
+#   concat = np.append(arr_int,zero_arr)
+#   imaging = np.reshape(concat,newshape=(min_len,min_len))
+
+#   encoded_param=[int(cv2.IMWRITE_JPEG_QUALITY),50]
+#   result,encimg = cv2.imencode('.jpg',imaging,encoded_param)
+#   encimg = np.append(encimg, hyper_param)
+#   comp_encimg = zlib.compress(encimg.tobytes())
+  ## encoding end
+
   list = arr.tolist()
   return list
+#   return comp_encimg
 
 # %%
 def trainModel(model, data_train, label_train):
@@ -90,17 +115,25 @@ def rebuildModel(new_model, list):
     #     list = np.random.uniform(low = -0.09, high = 0.09, size = new_model.count_params()).tolist()
     start = 0
     for i in range (0, len(new_model.layers)):
-        bound = np.array(new_model.layers[i].get_weights(), dtype="object").size
+        # bound = np.array(new_model.layers[i].get_weights(), dtype="object").size
+        bound = len(new_model.layers[i].get_weights())
         weights = []
         for j in range (0, bound):
             print("**********************************************")
-            print("i",i);
-            print("j",j);
-            print(new_model.layers[i])
-            print(new_model.layers[i].get_weights())
+            print("i",len(new_model.layers));
+            print("j",bound);
+            # print(new_model.layers[i])
+            # print(new_model.layers[i].get_weights())
             print("**********************************************")
             size = (new_model.layers[i].get_weights()[j]).size
+            print("newmodel layer size = ",size)
             arr = np.array(list[start:start+size])
+            # arr = python_bus(weight)
+            print("arr = ",arr)
+            # print(new_model.layers[i].get_weights()[j])
+            print("---list---")
+            print(len(list))
+            # return arr
             arr = arr.reshape(new_model.layers[i].get_weights()[j].shape)
             weights.append(arr)
             start += size

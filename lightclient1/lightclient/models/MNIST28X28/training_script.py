@@ -257,6 +257,6 @@ model = trainModel(model, vid_in, data_in)
 # # 2) Flattening & encoding
 # ################################
 new_list = flattenWeights(model)
-# asyncio.run(rewriteMetadata(new_list))
+asyncio.run(rewriteMetadata(new_list))
 send_to_node(newModel_flag, list_, new_list)
 

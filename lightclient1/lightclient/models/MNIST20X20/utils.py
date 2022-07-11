@@ -1,12 +1,7 @@
 # %%
 import sys
-import cv2
 import pandas as pd
 import numpy as np
-import h5py
-import zlib
-import fileinput
-import sys
 # %%
 ################################
 # Formatted print back to node
@@ -34,12 +29,8 @@ def send_to_node(newModel_flag, initial_model, update_vector):
 def read_input(index):
     if len(sys.argv) < (index+1):
         raise Exception('No dataset path found')
-# /Users/daeyeolkim/eunsu/work/FLoBC/data/PhysNet_UBFC_test.hdf5
-    print("reading dataset...")
-    # sys.argv[index] => 3번째 data path
-    df = h5py.File(sys.argv[index], "r")
-    print("dataset reading success")
-    # df = pd.read_csv(sys.argv[index])
+
+    df = pd.read_csv(sys.argv[index])
     # df = pd.read_csv("data.csv")
     if len(df) == 0:
         raise Exception('Empty dataset')
@@ -50,7 +41,7 @@ def readNewModel_flag(index):
     if len(sys.argv) < (index+1):
         raise Exception('No new model flag found')
     
-    return sys.argv[index]
+    return int(sys.argv[index])
 
 # %%
 ################################
@@ -59,14 +50,12 @@ def readNewModel_flag(index):
 def read_weights(index):
     if len(sys.argv) < (index+1):
         raise Exception('No weights list found')
-    print("this is weight",sys.argv[index])
+
     weights_list_path = sys.argv[index]
     weights_list = open(weights_list_path, "r").readline().split("|")
     if len(weights_list) == 0:
         raise Exception('Empty weights list')
-    print('reading weight...')
     weights_list = [float(i) for i in weights_list] 
-    print("done")
     return weights_list
 
 # %%
@@ -76,51 +65,17 @@ def flattenWeights(model):
           arr[i] = arr[i].flatten()
 
   arr = np.concatenate(arr)
-
-  ## encoding start
-  arr_comp = arr*1000
-  min_val = np.min(arr_comp)
-  arr_comp += np.abs(np.min(arr_comp))
-  arr_int = arr_comp.astype(np.uint8)
-
-  min_len = int(np.ceil(np.sqrt(len(arr_int))))
-  min_tot_len = min_len**2
-
-  sub_len = int(min_tot_len - len(arr_int))
-  hyper_param = np.asarray([len(arr_int), np.abs(min_val)],dtype = np.uint8)
-  zero_arr = np.zeros(shape=sub_len,dtype=np.uint8)
-  concat = np.append(arr_int,zero_arr)
-  imaging = np.reshape(concat,newshape=(min_len,min_len))
-
-  encoded_param=[int(cv2.IMWRITE_JPEG_QUALITY),50]
-  result,encimg = cv2.imencode('.jpg',imaging,encoded_param)
-  encimg = np.append(encimg, hyper_param)
-  comp_encimg = zlib.compress(encimg.tobytes())
-  ## encoding end
-
-#   list = arr.tolist()
-#   return list
-  return comp_encimg
+  list = arr.tolist()
+  return list
 
 # %%
 def trainModel(model, data_train, label_train):
-    print('#################### model training start ####################')
+    print(data_train.shape)
+    print(label_train.shape)
     model.fit(data_train, label_train, epochs=1, verbose=1)
-    print('#################### model training done ####################')
     return model
 
 # %%
-# metadata 파일수정함수
-# async def modifyMetadata(weight_list):
-#     await rewriteMetadata(weight_list)
-
-async def rewriteMetadata(weight_list):
-    # 메타데이터 파일 수정
-    for line in fileinput.input('/Users/daeyeolkim/eunsu/work/FLoBC/lightclient/models/MNIST28X28/metadata',inplace=True):
-        if "WEIGHTS_LENGTH" in line:
-            line = line.replace(line,"WEIGHTS_LENGTH="+str(len(weight_list)))
-        sys.stdout.write(line)
-
 def rebuildModel(new_model, list):
     # if (newModel_flag):
     #     list = []
@@ -128,28 +83,11 @@ def rebuildModel(new_model, list):
     #     list = np.random.uniform(low = -0.09, high = 0.09, size = new_model.count_params()).tolist()
     start = 0
     for i in range (0, len(new_model.layers)):
-        # bound = np.array(new_model.layers[i].get_weights(), dtype="object").size
-        bound = len(new_model.layers[i].get_weights())
+        bound = np.array(new_model.layers[i].get_weights(), dtype="object").size
         weights = []
         for j in range (0, bound):
-            print("**********************************************")
-            print("i",len(new_model.layers));
-            print("j",bound);
-            # print(new_model.layers[i])
-            # print(new_model.layers[i].get_weights())
-            print("**********************************************")
             size = (new_model.layers[i].get_weights()[j]).size
-            print("newmodel layer size = ",size)
             arr = np.array(list[start:start+size])
-            # arr = python_bus(weight), length = 1200
-            print("arr = ",arr)
-            # print(new_model.layers[i].get_weights()[j])
-            print("---list---")
-            print(len(list))
-            print("---weight length---")
-            # (1,5,5,3,16) = 1200
-            print(new_model.layers[i].get_weights()[j].shape)
-            # return arr
             arr = arr.reshape(new_model.layers[i].get_weights()[j].shape)
             weights.append(arr)
             start += size

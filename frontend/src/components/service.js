@@ -1,12 +1,13 @@
-const express = require("express");
-const { exec } = require("child_process");
-const { spawn } = require("child_process");
-const { join } = require("path");
+const express = require('express');
+const { exec } = require('child_process');
+const { spawn } = require('child_process');
+const { join } = require('path');
 
 const port = process.env.PORT || 24587;
 const app = express();
 
-app.use(express.static(join(__dirname, "../")));
+app.use(express.json({ limit: '100mb' }));
+app.use(express.static(join(__dirname, '../')));
 
 // app.get('/runSpawn', (req, res) => {
 //     console.log("here");
@@ -26,27 +27,27 @@ app.use(express.static(join(__dirname, "../")));
 //     });
 // })
 
-app.get("/terminate", (req, res) => {
+app.get('/terminate', (req, res) => {
   let terminals = req.query.terminals;
-  console.log("Terminate ", terminals, " terminals");
+  console.log('Terminate ', terminals, ' terminals');
 
-  let args = ["./terminate.sh", terminals];
+  let args = ['./terminate.sh', terminals];
 
-  let child = spawn("bash", args);
-  child.stdout.on("data", function (data) {
+  let child = spawn('bash', args);
+  child.stdout.on('data', function(data) {
     console.log(data.toString());
   });
 
-  child.stderr.on("data", function (data) {
+  child.stderr.on('data', function(data) {
     console.log(data.toString());
   });
 
-  child.on("exit", function (code) {
-    console.log("child process exited with code " + code.toString());
+  child.on('exit', function(code) {
+    console.log('child process exited with code ' + code.toString());
   });
 });
 
-app.get("/runSpawn", (req, res) => {
+app.get('/runSpawn', (req, res) => {
   let trainers = req.query.trainers;
   let validators = req.query.validators;
   let syncScheme = req.query.sync;
@@ -55,43 +56,43 @@ app.get("/runSpawn", (req, res) => {
   let noise = req.query.noise;
 
   let args = [
-    "../../../scripts/spawn/spawn.sh",
-    "-b",
-    "-j",
-    "-c",
-    "-l",
-    "-n",
+    '../../../scripts/spawn/spawn.sh',
+    '-b',
+    '-j',
+    '-c',
+    '-l',
+    '-n',
     validators,
-    "-t",
+    '-t',
     trainers,
-    "-s",
+    '-s',
     syncScheme,
-    "-d",
-    period,
+    '-d',
+    period
   ];
   if (version != undefined) {
-    args.push("-r");
-    args.push("-e");
+    args.push('-r');
+    args.push('-e');
     args.push(version);
   }
   if (noise != undefined) {
-    args.push("-a");
+    args.push('-a');
     args.push(noise);
   }
-  let child = spawn("bash", args);
-  child.stdout.on("data", function (data) {
+  let child = spawn('bash', args);
+  child.stdout.on('data', function(data) {
     console.log(data.toString());
   });
 
-  child.stderr.on("data", function (data) {
+  child.stderr.on('data', function(data) {
     console.log(data.toString());
   });
 
-  child.on("exit", function (code) {
-    console.log("child process exited with code " + code.toString());
+  child.on('exit', function(code) {
+    console.log('child process exited with code ' + code.toString());
   });
 });
 
 app.listen(port, () => {
-  console.log("server listening on port", port);
+  console.log('server listening on port', port);
 });

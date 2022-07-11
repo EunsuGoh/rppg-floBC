@@ -137,19 +137,15 @@ class AdaptivePooling3D(tf.keras.layers.Layer):
 def reshapeData(index):
     df = read_input(index)
 
-    idx = random.randint(0,10)
+    # idx = random.randint(0,10)
     cnt = 0
 
     video_data = []
     label_data = []
 
     for key in df.keys():
-        if cnt == idx:
-            video_data.extend(df[key]['preprocessed_video'])
-            label_data.extend(df[key]['preprocessed_label'])
-            break
-        else:
-            cnt+=1
+        video_data.extend(df[key]['preprocessed_video'])
+        label_data.extend(df[key]['preprocessed_label'])
 
     df.close()
     # df = df.sample(int(0.3*len(df)))
@@ -233,7 +229,7 @@ def createModel():
     model.add(Conv3D(1,kernel_size=(1,64,64),strides=(1,1,1),padding='same')),
     model.add(Reshape((-1,)))
 
-    model.compile(optimizer='adam', loss=neg_Pearson_Loss, metrics=['neg_Pcc'])
+    model.compile(optimizer='adam', loss=neg_Pearson_Loss, metrics=['accuracy'])
     return model
 
 # ###############################
@@ -247,12 +243,14 @@ elif (newModel_flag == "false"):
 else:
     newModel_flag = int(newModel_flag)
 data_train, label_train = reshapeData(2)
+vid_in = tf.reshape(data_train[0],[-1,32,128,128,3])
+data_in = tf.reshape(label_train[0],[-1,32])
 list_ = read_weights(3)
 model = createModel()
 model = rebuildModel(model, list_)
-model = trainModel(model, data_train, label_train)
+model = trainModel(model, vid_in, data_in)
 # ################################
-# # 2) Flattening
+# # 2) Flattening & encoding
 # ################################
 new_list = flattenWeights(model)
 send_to_node(newModel_flag, list_, new_list)
